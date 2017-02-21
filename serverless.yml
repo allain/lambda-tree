@@ -36,6 +36,7 @@ functions:
           parameters:
              paths:
                treeId: true
+
   performRequest:
     handler: lib/lambda-functions/trees/perform.get
     events:
