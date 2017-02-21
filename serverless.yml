@@ -1,0 +1,101 @@
+service: lambda-tree
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+
+functions:
+  submitTree:
+    handler: lib/lambda-functions/trees/submit.post
+    events:
+      - http:
+          path: trees
+          method: post
+          cors: true
+
+  queryTree:
+    handler: lib/lambda-functions/trees/query.get
+    events:
+      - http:
+          path: trees/{treeId}/state
+          method: get
+          cors: true
+          request:
+          parameters:
+             paths:
+               treeId: true
+
+  resultTree:
+    handler: lib/lambda-functions/trees/result.get
+    events:
+      - http:
+          path: trees/{treeId}
+          method: get
+          cors: true
+          request:
+          parameters:
+             paths:
+               treeId: true
+  performRequest:
+    handler: lib/lambda-functions/trees/perform.get
+    events:
+      - http:
+          path: trees/{treeId}/{requestId}
+          method: get
+          cors: true
+          request:
+          parameters:
+             paths:
+               treeId: true
+               requestId: true
+
+  deleteTree:
+    handler: lib/lambda-functions/trees/delete.del
+    events:
+      - http:
+          path: trees/{treeId}
+          method: delete
+          cors: true
+          request:
+          parameters:
+             paths:
+               treeId: true
+
+resources:
+  Resources:
+    RequestsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: requests
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: treeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: treeId
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    RequestDBIamPolicy:
+      Type: AWS::IAM::Policy
+      DependsOn: RequestsTable
+      Properties:
+        PolicyName: request-dynamodb
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:Scan
+                - dynamodb:BatchWriteItem
+              Resource: arn:aws:dynamodb:*:*:table/requests
+        Roles:
+          - Ref: IamRoleLambdaExecution
+plugins:
+  - serverless-offline
