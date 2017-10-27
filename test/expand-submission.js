@@ -1,5 +1,4 @@
 const test = require('tape')
-const td = require('testdouble')
 
 const expand = require('../lib/expand-submission.js')
 
@@ -13,7 +12,7 @@ test('expandSubmission - request can be a string', t => {
 })
 
 test('expandSubmission - request prop can be submitted as string', t => {
-  t.deepEqual(expand({request: 'http://a.com'}), {
+  t.deepEqual(expand({ request: 'http://a.com' }), {
     request: {
       url: 'http://a.com'
     }
@@ -22,7 +21,7 @@ test('expandSubmission - request prop can be submitted as string', t => {
 })
 
 test('expandSubmission - children are expanded too', t => {
-  t.deepEqual(expand({request: 'http://a.com', children: ['http://b.com']}), {
+  t.deepEqual(expand({ request: 'http://a.com', children: ['http://b.com'] }), {
     request: {
       url: 'http://a.com'
     },

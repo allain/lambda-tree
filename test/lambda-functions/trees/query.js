@@ -1,6 +1,5 @@
 const test = require('tape')
 const td = require('testdouble')
-const clearAllRequires = require('clear-require').all
 
 test('queryTree - handles invalid id', t => {
   const queryTree = require('../../../lib/lambda-functions/trees/query.js').get

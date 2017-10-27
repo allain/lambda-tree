@@ -5,7 +5,8 @@ const clearAllRequires = require('clear-require').all
 test('resultTree - handles invalid id', t => {
   td.reset()
 
-  const resultTree = require('../../../lib/lambda-functions/trees/result.js').get
+  const resultTree = require('../../../lib/lambda-functions/trees/result.js')
+    .get
 
   const event = {
     pathParameters: {
@@ -25,7 +26,8 @@ test('resultTree - handle valid request for unknown tree', t => {
   const treesStore = td.replace('../../../lib/stores/trees.js')
   td.when(treesStore.queryTree('404', td.callback)).thenCallback(null, null)
 
-  const resultTree = require('../../../lib/lambda-functions/trees/result.js').get
+  const resultTree = require('../../../lib/lambda-functions/trees/result.js')
+    .get
 
   const request = { pathParameters: { treeId: '404' } }
 
@@ -41,17 +43,14 @@ test('resultTree - does nothing when entire tree is completed', t => {
   td.reset()
   const trees = td.replace('../../../lib/stores/trees.js')
 
-  td.when(trees.queryTree('123', td.callback))
-    .thenCallback(null, {
-      id: '234',
-      treeId: '123',
-      started: 12344,
-      finished: 12345
-    })
+  td.when(trees.queryTree('123', td.callback)).thenCallback(null, {
+    id: '234',
+    treeId: '123',
+    started: 12344,
+    finished: 12345
+  })
 
-  td.when(
-    trees.queryRequest('123', '234', td.callback)
-  ).thenCallback(null, {
+  td.when(trees.queryRequest('123', '234', td.callback)).thenCallback(null, {
     id: '234',
     treeId: '123',
     requested: 12345,
@@ -61,7 +60,8 @@ test('resultTree - does nothing when entire tree is completed', t => {
     productType: 'application/json'
   })
 
-  const resultTree = require('../../../lib/lambda-functions/trees/result.js').get
+  const resultTree = require('../../../lib/lambda-functions/trees/result.js')
+    .get
 
   const request = { pathParameters: { treeId: '123' } }
 
@@ -82,20 +82,19 @@ test('resultTree - does nothing when root is started recently', t => {
   const now = Date.now()
   const trees = td.replace('../../../lib/stores/trees.js')
 
-  td.when(trees.queryTree('123', td.callback)).thenCallback(null,
-    {
-      id: '234',
-      treeId: '123',
-      requested: now - 10, // 10ms ago
-      started: now - 5 // 5ms ago
-    }
-  )
+  td.when(trees.queryTree('123', td.callback)).thenCallback(null, {
+    id: '234',
+    treeId: '123',
+    requested: now - 10, // 10ms ago
+    started: now - 5 // 5ms ago
+  })
 
-  const resultTree = require('../../../lib/lambda-functions/trees/result.js').get
+  const resultTree = require('../../../lib/lambda-functions/trees/result.js')
+    .get
 
   const request = {
     headers: {
-      'Host': 'a.com'
+      Host: 'a.com'
     },
     pathParameters: { treeId: '123' },
     path: '/trees/123'
@@ -103,11 +102,18 @@ test('resultTree - does nothing when root is started recently', t => {
 
   resultTree(request, {}, (err, result) => {
     t.error(err, 'should not error')
-    t.equal(result.statusCode, 202, 'should HTTP 202 Accepted when processing is not completed')
+    t.equal(
+      result.statusCode,
+      202,
+      'should HTTP 202 Accepted when processing is not completed'
+    )
 
-    t.equal(result.body, undefined, 'body should be empty when things are not completed')
+    t.equal(
+      result.body,
+      undefined,
+      'body should be empty when things are not completed'
+    )
     // TODO: clearAllRequires()
     t.end()
   })
-
 })

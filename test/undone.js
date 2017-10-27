@@ -1,5 +1,4 @@
 const test = require('tape')
-const td = require('testdouble')
 
 const undone = require('../lib/undone.js')
 
@@ -42,9 +41,7 @@ test('undone - omits parent nodes unless all children are done', t => {
   const tree = {
     id: 1,
     treeId: 234,
-    children: [
-      { id: 2, started: 123, finished: 234 }
-    ]
+    children: [{ id: 2, started: 123, finished: 234 }]
   }
 
   undone(tree, (err, result) => {

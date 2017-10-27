@@ -1,9 +1,9 @@
 const test = require('tape')
 const td = require('testdouble')
-const clearAllRequires = require('clear-require').all
 
 test('deleteTree - handles invalid id', t => {
-  const deleteTree = require('../../../lib/lambda-functions/trees/delete.js').del
+  const deleteTree = require('../../../lib/lambda-functions/trees/delete.js')
+    .del
 
   const event = {
     pathParameters: {
@@ -25,7 +25,8 @@ test('deleteTree - handle valid request for unknown tree', t => {
   const treesStore = td.replace('../../../lib/stores/trees.js')
   td.when(treesStore.deleteTree('404', td.callback)).thenCallback(null, null)
 
-  const deleteTree = require('../../../lib/lambda-functions/trees/delete.js').del
+  const deleteTree = require('../../../lib/lambda-functions/trees/delete.js')
+    .del
 
   const request = { pathParameters: { treeId: '404' } }
   const context = {}
@@ -44,7 +45,8 @@ test('deleteTree - does delete tree', t => {
   const treesStore = td.replace('../../../lib/stores/trees.js')
   td.when(treesStore.deleteTree('found', td.callback)).thenCallback(null, true)
 
-  const deleteTree = require('../../../lib/lambda-functions/trees/delete.js').del
+  const deleteTree = require('../../../lib/lambda-functions/trees/delete.js')
+    .del
 
   const request = { pathParameters: { treeId: 'found' } }
   const context = {}

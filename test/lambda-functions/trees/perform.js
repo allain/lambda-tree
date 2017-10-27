@@ -74,44 +74,60 @@ test('perform - performs root request when doable', t => {
     },
     body: '["Child"]'
   }
-  td.when(request(requestOptions, td.callback)).thenCallback(null, {
-    statusCode: 200
-  }, 'Parent Body')
-
-  td.when(trees.updateRequest('123', 'parent', { product: '"Parent Body"', productType: 'application/json' }, td.callback))
-    .thenCallback(null)
-  td.when(trees.updateRequest('123', 'parent', { started: 12345 }, td.callback))
-    .thenCallback(null)
-  td.when(trees.updateRequest('123', 'parent', { finished: 12346 }, td.callback))
-    .thenCallback(null)
-
-  td.when(
-    trees.queryBranch('123', 'parent', td.callback)
-  ).thenCallback(null,
+  td.when(request(requestOptions, td.callback)).thenCallback(
+    null,
     {
-      id: 'parent',
-      treeId: '123',
-      request: { url: 'http://www.testing.com' },
-      children: [
-        { id: 'child', product: '"Child"', productType: 'application/json' }
-      ]
-    }
+      statusCode: 200
+    },
+    'Parent Body'
+  )
+
+  td
+    .when(
+      trees.updateRequest(
+        '123',
+        'parent',
+        { product: '"Parent Body"', productType: 'application/json' },
+        td.callback
+      )
     )
+    .thenCallback(null)
+  td
+    .when(trees.updateRequest('123', 'parent', { started: 12345 }, td.callback))
+    .thenCallback(null)
+  td
+    .when(
+      trees.updateRequest('123', 'parent', { finished: 12346 }, td.callback)
+    )
+    .thenCallback(null)
+
+  td.when(trees.queryBranch('123', 'parent', td.callback)).thenCallback(null, {
+    id: 'parent',
+    treeId: '123',
+    request: { url: 'http://www.testing.com' },
+    children: [
+      { id: 'child', product: '"Child"', productType: 'application/json' }
+    ]
+  })
 
   const perform = require('../../../lib/lambda-functions/trees/perform.js').get
 
-  perform({ pathParameters: { treeId: '123', requestId: 'parent' } }, {}, (err, result) => {
-    t.error(err, 'should not error')
-    t.equal(result.statusCode, 202, 'Should HTTP 202 Accepted')
+  perform(
+    { pathParameters: { treeId: '123', requestId: 'parent' } },
+    {},
+    (err, result) => {
+      t.error(err, 'should not error')
+      t.equal(result.statusCode, 202, 'Should HTTP 202 Accepted')
 
-    t.equal(result.body, undefined, 'body should be empty')
+      t.equal(result.body, undefined, 'body should be empty')
 
-    // allow the request call to be made
-    setTimeout(() => {
-      t.equal(td.explain(request).callCount, 1, 'request should be called')
+      // allow the request call to be made
+      setTimeout(() => {
+        t.equal(td.explain(request).callCount, 1, 'request should be called')
 
-      clearAllRequires()
-      t.end()
-    }, 100)
-  })
+        clearAllRequires()
+        t.end()
+      }, 100)
+    }
+  )
 })
