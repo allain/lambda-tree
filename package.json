@@ -6,8 +6,8 @@
   "author": "Allain Lalonde <allain.lalonde@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "deploy": "rm -r node_modules/ && npm install --production && sls deploy --verbose",
-    "format": "standard-format --write",
+    "format": "eslint --fix .",
+    "deploy": "serverless deploy --verbose",
     "test": "tape test/**/*.js | colortape"
   },
   "dependencies": {
