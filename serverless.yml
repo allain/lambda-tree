@@ -2,7 +2,7 @@ service: lambda-tree
 
 provider:
   name: aws
-  runtime: nodejs6
+  runtime: nodejs6.10
 
 functions:
   submitTree:
