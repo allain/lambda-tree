@@ -14,7 +14,6 @@
     "aws-sdk": "^2.10.0",
     "dynamo-converter": "^1.0.1",
     "request": "^2.79.0",
-    "serverless-offline": "^3.8.3",
     "shortid": "^2.2.6",
     "tv4": "^1.2.7"
   },
@@ -31,6 +30,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "serverless": "^1.23.0",
+    "serverless-offline": "^3.8.3",
     "tape": "^4.6.3",
     "testdouble": "^3.2.6"
   }
