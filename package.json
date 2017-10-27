@@ -6,8 +6,9 @@
   "author": "Allain Lalonde <allain.lalonde@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "format": "eslint --fix .",
     "deploy": "serverless deploy --verbose",
+    "format": "eslint --fix .",
+    "logs": "serverless logs --verbose",
     "test": "tape test/**/*.js | colortape"
   },
   "dependencies": {
