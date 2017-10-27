@@ -30,6 +30,7 @@
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "serverless": "^1.23.0",
     "tape": "^4.6.3",
     "testdouble": "^3.2.6"
   }
