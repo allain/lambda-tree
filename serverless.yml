@@ -29,7 +29,7 @@ functions:
     handler: lib/lambda-functions/trees/result.get
     events:
       - http:
-          path: trees/{treeId}
+          path: trees/{treeId}/result
           method: get
           cors: true
           request:
