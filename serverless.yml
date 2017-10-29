@@ -3,8 +3,14 @@ service: lambda-tree
 provider:
   name: aws
   runtime: nodejs6.10
-
+  environment:
+    TOKEN_AUDIENCE: ${file(sls-props.yml):token.audience}
+    TOKEN_ISSUER: ${file(sls-props.yml):token.issuer}
+    TOKEN_SECRET: ${file(sls-props.yml):token.secret}
 functions:
+  authorize:
+    handler: lib/lambda-functions/authorize.handler
+
   submitTree:
     handler: lib/lambda-functions/trees/submit.post
     events:
@@ -12,6 +18,7 @@ functions:
           path: trees
           method: post
           cors: true
+          authorizer: authorize
 
   queryTree:
     handler: lib/lambda-functions/trees/query.get
