@@ -4,12 +4,22 @@ provider:
   name: aws
   runtime: nodejs6.10
   environment:
-    TOKEN_AUDIENCE: ${file(sls-props.yml):token.audience}
-    TOKEN_ISSUER: ${file(sls-props.yml):token.issuer}
-    TOKEN_SECRET: ${file(sls-props.yml):token.secret}
+    TOKEN_AUDIENCE: ${file(secrets.yml):jwt.audience}
+    TOKEN_ISSUER: ${file(secrets.yml):jwt.issuer}
+    TOKEN_SECRET: ${file(secrets.yml):jwt.secret}
+
 functions:
   authorize:
     handler: lib/lambda-functions/authorize.handler
+
+  listTrees:
+    handler: lib/lambda-functions/trees/list.get
+    events:
+      - http:
+          path: trees
+          method: get 
+          cors: true
+          authorizer: authorize
 
   submitTree:
     handler: lib/lambda-functions/trees/submit.post
@@ -27,7 +37,7 @@ functions:
           path: trees/{treeId}/state
           method: get
           cors: true
-          request:
+          authorizer: authorize
           parameters:
              paths:
                treeId: true
@@ -36,10 +46,10 @@ functions:
     handler: lib/lambda-functions/trees/result.get
     events:
       - http:
-          path: trees/{treeId}/result
+          path: trees/{treeId}
           method: get
           cors: true
-          request:
+          authorizer: authorize
           parameters:
              paths:
                treeId: true
@@ -51,7 +61,7 @@ functions:
           path: trees/{treeId}/{requestId}
           method: get
           cors: true
-          request:
+          authorizer: authorize
           parameters:
              paths:
                treeId: true
@@ -64,7 +74,7 @@ functions:
           path: trees/{treeId}
           method: delete
           cors: true
-          request:
+          authorizer: authorize
           parameters:
              paths:
                treeId: true

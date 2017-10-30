@@ -9,7 +9,8 @@
     "deploy": "serverless deploy --verbose",
     "format": "eslint --fix .",
     "logs": "serverless logs --verbose",
-    "test": "tape test/**/*.js | colortape"
+    "test": "tape test/**/*.js | colortape",
+    "generate-jwt": "node ./tools/generate-jwt.js"
   },
   "dependencies": {
     "aws-sdk": "^2.10.0",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "clear-require": "^2.0.0",
     "colortape": "^0.1.2",
+    "commander": "^2.11.0",
     "eslint": "^4.10.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-prettier-standard": "^1.0.1",
@@ -31,6 +33,7 @@
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "js-yaml": "^3.10.0",
     "serverless": "^1.23.0",
     "serverless-offline": "^3.8.3",
     "tape": "^4.6.3",
